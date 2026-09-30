@@ -1,0 +1,84 @@
+package components
+
+templ APIViewer() {
+	<section class="mb-12">
+		<div class="mb-6">
+			<h2 class="text-xl font-bold text-white tracking-tight flex items-center gap-2">
+				<span class="text-cyan-400 font-mono">04.</span>
+				<span>Interactive Cloud REST API Console</span>
+			</h2>
+			<p class="text-xs text-slate-400 mt-0.5">Test real-time endpoints directly with live JSON payload rendering and latency metrics</p>
+		</div>
+
+		<div class="card p-6 bg-slate-900/50 border-slate-800/80">
+			<div class="flex flex-wrap items-center justify-between gap-3 mb-4 pb-4 border-b border-slate-800">
+				<div class="flex items-center gap-2 flex-wrap">
+					<button
+						onclick="fetchApi('/api/v1/health', 'GET /api/v1/health')"
+						id="btn-health"
+						class="btn btn-secondary text-xs"
+					>
+						<span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+						Test Health Endpoint
+					</button>
+					<button
+						onclick="fetchApi('/api/v1/cv', 'GET /api/v1/cv')"
+						id="btn-cv"
+						class="btn btn-ghost text-xs"
+					>
+						<span class="w-2 h-2 rounded-full bg-cyan-400"></span>
+						Test Resume JSON API
+					</button>
+				</div>
+				<div id="api-status-bar" class="flex items-center gap-3 text-xs font-mono text-slate-400">
+					<span id="api-endpoint-label">Endpoint: /api/v1/health</span>
+					<span id="api-status-badge" class="px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800/40">Status: 200 OK</span>
+					<span id="api-latency-badge" class="text-cyan-400">Latency: --</span>
+				</div>
+			</div>
+
+			<div class="relative">
+				<pre id="api-output" class="p-4 rounded-lg bg-obsidian text-emerald-300 font-mono text-xs overflow-x-auto border border-slate-800 max-h-80 leading-relaxed">Click a test button above or loading default /api/v1/health...</pre>
+			</div>
+		</div>
+
+		<script>
+			async function fetchApi(url, label) {
+				const start = performance.now();
+				const output = document.getElementById('api-output');
+				const endpointLabel = document.getElementById('api-endpoint-label');
+				const statusBadge = document.getElementById('api-status-badge');
+				const latencyBadge = document.getElementById('api-latency-badge');
+
+				endpointLabel.innerText = 'Endpoint: ' + url;
+				output.innerText = 'Fetching ' + url + '...';
+
+				try {
+					const res = await fetch(url);
+					const duration = (performance.now() - start).toFixed(1);
+					const data = await res.json();
+
+					statusBadge.innerText = 'Status: ' + res.status + ' ' + res.statusText;
+					if (res.ok) {
+						statusBadge.className = 'px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800/40';
+					} else {
+						statusBadge.className = 'px-2 py-0.5 rounded bg-rose-950 text-rose-400 border border-rose-800/40';
+					}
+
+					const serverDuration = res.headers.get('X-Response-Time') || duration + 'ms';
+					latencyBadge.innerText = 'Latency: ' + serverDuration;
+					output.innerText = JSON.stringify(data, null, 2);
+				} catch (err) {
+					statusBadge.innerText = 'Status: ERR';
+					statusBadge.className = 'px-2 py-0.5 rounded bg-rose-950 text-rose-400 border border-rose-800/40';
+					output.innerText = '// Error fetching API: ' + err.message;
+				}
+			}
+
+			// Initial load
+			document.addEventListener('DOMContentLoaded', () => {
+				fetchApi('/api/v1/health', 'GET /api/v1/health');
+			});
+		</script>
+	</section>
+}

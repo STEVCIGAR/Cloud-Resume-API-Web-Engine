@@ -1,0 +1,55 @@
+package components
+
+import "github.com/cloud-resume/api/internal/data"
+
+templ ExperienceSection(experiences []data.Experience) {
+	<section class="mb-12">
+		<div class="mb-6">
+			<h2 class="text-xl font-bold text-white tracking-tight flex items-center gap-2">
+				<span class="text-cyan-400 font-mono">02.</span>
+				<span>Engineering Leadership & Experience</span>
+			</h2>
+			<p class="text-xs text-slate-400 mt-0.5">Track record of building resilient distributed architectures</p>
+		</div>
+
+		<div class="relative border-l border-slate-800 ml-3 md:ml-4 space-y-8">
+			for _, exp := range experiences {
+				<div class="relative pl-6 md:pl-8">
+					<!-- Timeline Dot -->
+					<div class="absolute -left-1.5 top-1.5 w-3 h-3 rounded-full bg-slate-900 border-2 border-cyan-400"></div>
+
+					<div class="card p-6 bg-slate-900/40 border-slate-800/80">
+						<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-2">
+							<h3 class="text-base font-bold text-white">
+								{ exp.Role }
+								<span class="text-cyan-400 font-normal">{ "@ " + exp.Company }</span>
+							</h3>
+							<div class="flex items-center gap-2 text-xs font-mono text-slate-400">
+								<span>{ exp.Period }</span>
+								<span>•</span>
+								<span>{ exp.Location }</span>
+							</div>
+						</div>
+
+						<ul class="space-y-1.5 mb-4 text-xs text-slate-300">
+							for _, hl := range exp.Highlights {
+								<li class="flex items-start gap-2">
+									<span class="text-cyan-400 mt-0.5">▹</span>
+									<span>{ hl }</span>
+								</li>
+							}
+						</ul>
+
+						<div class="flex flex-wrap gap-1.5 pt-2 border-t border-slate-800/60">
+							for _, tech := range exp.TechStack {
+								<span class="tag">
+									{ tech }
+								</span>
+							}
+						</div>
+					</div>
+				</div>
+			}
+		</div>
+	</section>
+}

@@ -1,0 +1,17 @@
+package views
+
+import (
+	"github.com/cloud-resume/api/internal/data"
+	"github.com/cloud-resume/api/internal/views/components"
+)
+
+templ Home(resume data.Resume, activeSkillCat string) {
+	@Layout(resume.Profile.Name + " | " + resume.Profile.Title) {
+		@components.Header(resume.Profile)
+		@components.Metrics(resume.Metrics)
+		@components.SkillsSection(activeSkillCat, resume.GetSkillsByCategory(activeSkillCat))
+		@components.ExperienceSection(resume.Experiences)
+		@components.ProjectsSection(resume.Projects)
+		@components.APIViewer()
+	}
+}

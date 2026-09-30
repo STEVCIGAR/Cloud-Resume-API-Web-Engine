@@ -1,0 +1,39 @@
+package views
+
+templ Layout(title string) {
+	<!DOCTYPE html>
+	<html lang="en" class="dark">
+		<head>
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<title>{ title }</title>
+			<meta name="description" content="High-performance Server-Driven Cloud Resume and API powered by Go, Templ, and HTMX."/>
+			<link rel="preconnect" href="https://fonts.googleapis.com"/>
+			<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+			<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"/>
+			<link rel="stylesheet" href="/static/css/style.css"/>
+			<!-- HTMX for Server-Driven UI -->
+			<script src="https://unpkg.com/htmx.org@2.0.4"></script>
+		</head>
+		<body class="bg-obsidian text-slate-100 font-sans antialiased min-h-screen">
+			<div class="glow-bg"></div>
+			<div class="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+				{ children... }
+			</div>
+			
+			<footer class="mt-20 border-t border-slate-800/80 py-8 text-center text-xs text-slate-500">
+				<div class="flex items-center justify-center space-x-4 mb-2">
+					<span class="inline-flex items-center gap-1.5 font-mono text-cyan-400">
+						<span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+						Server-Side Rendered with Go + Templ + HTMX
+					</span>
+					<span>•</span>
+					<span>Zero-JS Overhead</span>
+					<span>•</span>
+					<a href="/api/v1/cv" class="text-cyan-400 hover:underline">Raw JSON API</a>
+				</div>
+				<p>© 2026 Cloud Resume Engine. Engineered for ultra-low latency.</p>
+			</footer>
+		</body>
+	</html>
+}

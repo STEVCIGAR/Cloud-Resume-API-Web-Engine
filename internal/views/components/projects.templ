@@ -1,0 +1,50 @@
+package components
+
+import "github.com/cloud-resume/api/internal/data"
+
+templ ProjectsSection(projects []data.Project) {
+	<section class="mb-12">
+		<div class="mb-6">
+			<h2 class="text-xl font-bold text-white tracking-tight flex items-center gap-2">
+				<span class="text-cyan-400 font-mono">03.</span>
+				<span>Key Distributed Systems & Cloud Projects</span>
+			</h2>
+			<p class="text-xs text-slate-400 mt-0.5">High-performance production prototypes and cloud architectures</p>
+		</div>
+
+		<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+			for _, prj := range projects {
+				<div class="card p-6 bg-slate-900/40 border-slate-800/80 flex flex-col justify-between">
+					<div>
+						<div class="flex items-center justify-between mb-3">
+							<h3 class="text-base font-bold text-white">
+								{ prj.Title }
+							</h3>
+							if prj.GitHubURL != "" {
+								<a href={ templ.SafeURL(prj.GitHubURL) } target="_blank" class="text-slate-400 hover:text-cyan-400 transition-colors">
+									<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+										<path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"></path>
+									</svg>
+								</a>
+							}
+						</div>
+						<p class="text-xs text-slate-300 leading-relaxed mb-3">
+							{ prj.Description }
+						</p>
+						<div class="mb-4 p-2.5 rounded bg-cyan-950/40 border border-cyan-800/30 text-xs text-cyan-300 font-mono">
+							⚡ Impact: { prj.Impact }
+						</div>
+					</div>
+
+					<div class="flex flex-wrap gap-1.5 pt-2">
+						for _, tech := range prj.TechStack {
+							<span class="tag">
+								{ tech }
+							</span>
+						}
+					</div>
+				</div>
+			}
+		</div>
+	</section>
+}

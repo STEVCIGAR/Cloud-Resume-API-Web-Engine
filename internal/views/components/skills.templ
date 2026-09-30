@@ -1,0 +1,107 @@
+package components
+
+import (
+	"fmt"
+	"github.com/cloud-resume/api/internal/data"
+)
+
+templ SkillsSection(activeCategory string, skills []data.Skill) {
+	<section class="mb-12">
+		<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+			<div>
+				<h2 class="text-xl font-bold text-white tracking-tight flex items-center gap-2">
+					<span class="text-cyan-400 font-mono">01.</span>
+					<span>Core Technical Competencies</span>
+				</h2>
+				<p class="text-xs text-slate-400 mt-0.5">
+					Interactive Server-Driven UI component powered by <span class="font-mono text-cyan-400">HTMX</span> & <span class="font-mono text-cyan-400">Templ</span>
+				</p>
+			</div>
+
+			<!-- HTMX Filter Tabs -->
+			<div class="flex items-center gap-1.5 p-1 bg-slate-900/80 border border-slate-800 rounded-lg overflow-x-auto">
+				<button
+					hx-get="/components/skills?cat=all"
+					hx-target="#skills-grid"
+					hx-swap="innerHTML"
+					class={ "tab-btn", templ.KV("active", activeCategory == "" || activeCategory == "all") }
+					onclick="document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active')); this.classList.add('active');"
+				>
+					All Domains
+				</button>
+				<button
+					hx-get="/components/skills?cat=backend"
+					hx-target="#skills-grid"
+					hx-swap="innerHTML"
+					class={ "tab-btn", templ.KV("active", activeCategory == "backend") }
+					onclick="document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active')); this.classList.add('active');"
+				>
+					Golang & Systems
+				</button>
+				<button
+					hx-get="/components/skills?cat=database"
+					hx-target="#skills-grid"
+					hx-swap="innerHTML"
+					class={ "tab-btn", templ.KV("active", activeCategory == "database") }
+					onclick="document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active')); this.classList.add('active');"
+				>
+					Databases & Cache
+				</button>
+				<button
+					hx-get="/components/skills?cat=cloud_sre"
+					hx-target="#skills-grid"
+					hx-swap="innerHTML"
+					class={ "tab-btn", templ.KV("active", activeCategory == "cloud_sre") }
+					onclick="document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active')); this.classList.add('active');"
+				>
+					Cloud & SRE
+				</button>
+			</div>
+		</div>
+
+		<!-- Dynamic Partial Target -->
+		<div id="skills-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+			@SkillsGrid(skills)
+		</div>
+	</section>
+}
+
+templ SkillsGrid(skills []data.Skill) {
+	for _, skill := range skills {
+		<div class="card p-5 bg-slate-900/40 hover:bg-slate-900/80 transition-all duration-200 border-slate-800/80">
+			<div class="flex items-start justify-between mb-2">
+				<div>
+					<h3 class="font-semibold text-white text-base tracking-tight flex items-center gap-2">
+						{ skill.Name }
+						<span class="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-cyan-950 text-cyan-400 border border-cyan-800/40">
+							{ skill.Level }
+						</span>
+					</h3>
+				</div>
+				<span class="text-xs font-mono font-bold text-cyan-400">
+					{ fmt.Sprintf("%d%%", skill.Proficiency) }
+				</span>
+			</div>
+
+			<!-- Proficiency Bar -->
+			<div class="w-full bg-slate-800 rounded-full h-1.5 mb-3 overflow-hidden">
+				<div
+					class="bg-gradient-to-r from-cyan-500 to-emerald-400 h-1.5 rounded-full transition-all duration-500"
+					style={ fmt.Sprintf("width: %d%%", skill.Proficiency) }
+				></div>
+			</div>
+
+			<p class="text-xs text-slate-300 mb-3 leading-relaxed">
+				{ skill.Description }
+			</p>
+
+			<div class="flex flex-wrap gap-1.5">
+				for _, tag := range skill.Tags {
+					<span class="tag">
+						#{ tag }
+					</span>
+				}
+			</div>
+		</div>
+	}
+}
